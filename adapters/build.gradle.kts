@@ -40,6 +40,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.room:room-runtime:${project.properties["roomVersion"]}")
+    implementation("androidx.room:room-ktx:${project.properties["roomVersion"]}")
     kapt("androidx.room:room-compiler:${project.properties["roomVersion"]}")
     implementation("com.google.dagger:dagger:${project.properties["daggerVersion"]}")
     kapt("com.google.dagger:dagger-compiler:${project.properties["daggerVersion"]}")

@@ -3,7 +3,8 @@ package io.viesure.test.ui
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.viesure.test.usecases.GetArticlesStreamCached
+import io.viesure.test.usecases.GetCurrentArticles
+import io.viesure.test.usecases.GetArticlesSyncing
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -17,7 +18,8 @@ import kotlin.random.Random
 import io.viesure.test.entities.Article as ArticleEntity
 
 class ArticleListViewModel @Inject constructor(
-    private val getArticlesStreamCached: GetArticlesStreamCached
+    private val getCurrentArticles: GetCurrentArticles,
+    private val getArticlesSyncing: GetArticlesSyncing
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState.INITIAL)
@@ -35,7 +37,7 @@ class ArticleListViewModel @Inject constructor(
     }
 
     private fun launchArticlesStream() {
-        getArticlesStreamCached.articlesStream
+        getCurrentArticles.articlesStream
             .onEach { articles ->
                 updateUiState { uiState ->
                     uiState.copy(
@@ -48,7 +50,7 @@ class ArticleListViewModel @Inject constructor(
     }
 
     private fun launchArticlesLoadingStream() {
-        getArticlesStreamCached.articlesLoadingStream
+        getArticlesSyncing.articlesSyncingStream
             .onEach { loading ->
                 updateUiState {
                     it.copy(
