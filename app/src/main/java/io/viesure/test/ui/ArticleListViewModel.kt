@@ -1,23 +1,24 @@
 package io.viesure.test.ui
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.viesure.test.usecases.be.GetArticlesFromBackend
+import io.viesure.test.usecases.GetArticlesStreamCached
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 import kotlin.random.Random
 import io.viesure.test.entities.Article as ArticleEntity
 
-class ArticleListViewModel @Inject constructor(val getArticlesFromBackend: GetArticlesFromBackend) :
-    ViewModel() {
+class ArticleListViewModel @Inject constructor(
+    private val getArticlesStreamCached: GetArticlesStreamCached
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState.INITIAL)
     val uiState = _uiState.asSharedFlow()
@@ -29,54 +30,39 @@ class ArticleListViewModel @Inject constructor(val getArticlesFromBackend: GetAr
     val uiActions = _uiActions.asSharedFlow()
 
     init {
-        initializeDummyUiState()
-        initializeFromWeb()
+        launchArticlesStream()
+        launchArticlesLoadingStream()
     }
 
-    private fun initializeFromWeb() {
-        synchronized(_uiState) {
-            _uiState.value = _uiState.value.copy(
-                loading = true
-            )
-        }
-
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                try {
-                    val articles = getArticlesFromBackend
-                        .getArticles()
-                        .map { Article.fromEntity(it) }
-                    synchronized(_uiState) {
-                        _uiState.value = _uiState.value.copy(
-                            articles = articles,
-                            loading = false
-                        )
-                    }
-                } catch (exception: Exception) {
-                    // TODO replace by proper user-facing error message
-                    // TODO use string resources instead of magic string
-                    _uiActions.tryEmit(UiAction.ShowError("Couldn't synchronize articles from backend: ${exception.message}"))
-                    Log.e(this@ArticleListViewModel::class.simpleName, "Error retrieving articles", exception)
-                    synchronized(_uiState) {
-                        _uiState.value = _uiState.value.copy(
-                            loading = false
-                        )
-                    }
+    private fun launchArticlesStream() {
+        getArticlesStreamCached.articlesStream
+            .onEach { articles ->
+                updateUiState { uiState ->
+                    uiState.copy(
+                        articles = articles.map { Article.fromEntity(it) }
+                    )
                 }
             }
-        }
+            .flowOn(Dispatchers.IO)
+            .launchIn(viewModelScope)
     }
 
-    private fun initializeDummyUiState() {
-        val articles = mutableListOf<Article>().also { list ->
-            (0 until 50).forEach { // TODO fix warning
-                list.add(Article.createDummy())
+    private fun launchArticlesLoadingStream() {
+        getArticlesStreamCached.articlesLoadingStream
+            .onEach { loading ->
+                updateUiState {
+                    it.copy(
+                        loading = loading
+                    )
+                }
             }
-        }
+            .flowOn(Dispatchers.IO)
+            .launchIn(viewModelScope)
+    }
+
+    private fun updateUiState(block: (uiState: UiState) -> UiState) {
         synchronized(_uiState) {
-            _uiState.value = _uiState.value.copy(
-                articles = articles.toList()
-            )
+            _uiState.value = block(_uiState.value)
         }
     }
 

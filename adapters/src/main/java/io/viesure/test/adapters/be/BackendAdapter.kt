@@ -16,7 +16,7 @@ class BackendAdapter @Inject constructor() : GetArticlesFromBackend {
 
     private val service: BackendService = retrofit.create(BackendService::class.java)
 
-    override suspend fun getArticles(): List<ArticleEntity> {
+    override suspend fun invoke(): List<ArticleEntity> {
         return service.listArticles().map { it.toEntity() }
     }
 }
