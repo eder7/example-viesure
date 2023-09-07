@@ -2,6 +2,7 @@ package io.viesure.test
 
 import android.app.Application
 import io.viesure.test.di.DaggerAppComponent
+import timber.log.Timber
 
 class TestApplication : Application() {
 
@@ -11,6 +12,16 @@ class TestApplication : Application() {
         .build()
 
     init {
-        component.inject(this)
+        component.inject(this) // For potential use of injections in the application class
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+
+        initTimber()
+    }
+
+    private fun initTimber() {
+        Timber.plant(Timber.DebugTree())
     }
 }

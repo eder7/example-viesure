@@ -72,6 +72,7 @@ dependencies {
     kapt("com.google.dagger:dagger-compiler:${project.properties["daggerVersion"]}")
     implementation("io.coil-kt:coil-compose:${project.properties["coilVersion"]}")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("com.jakewharton.timber:timber:${project.properties["timberVersion"]}")
 
     testImplementation("junit:junit:4.13.2")
 

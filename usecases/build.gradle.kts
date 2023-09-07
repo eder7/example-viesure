@@ -39,6 +39,7 @@ dependencies {
     implementation("com.google.android.material:material:1.9.0")
     implementation("com.google.dagger:dagger:${project.properties["daggerVersion"]}")
     kapt("com.google.dagger:dagger-compiler:${project.properties["daggerVersion"]}")
+    implementation("com.jakewharton.timber:timber:${project.properties["timberVersion"]}")
 
     testImplementation("junit:junit:4.13.2")
 

@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -24,7 +25,7 @@ import javax.inject.Singleton
 internal class ArticlesRepository @Inject constructor(private val database: Database) :
     GetCurrentArticles, GetArticles, PutArticles {
 
-    private val tag = this::class.simpleName
+    private val tag = this::class.simpleName!!
     private val scope = CoroutineScope(Dispatchers.IO)
 
     private val _articlesStream = database.articlesDao().getAllStream()
@@ -32,7 +33,7 @@ internal class ArticlesRepository @Inject constructor(private val database: Data
             articles.map { article ->
                 article.toEntity()
             }.also {
-                Log.i(tag, "Loaded ${it.size} persisted articles")
+                Timber.tag(tag).i("Loaded %d persisted articles", it.size)
             }
         }.shareIn(scope, SharingStarted.Eagerly, replay = 1)
 

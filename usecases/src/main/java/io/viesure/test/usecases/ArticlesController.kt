@@ -8,6 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -21,7 +22,7 @@ internal class ArticlesController @Inject constructor(
     private val getLocalArticles: GetArticles
 ) : GetArticlesSyncing {
 
-    private val tag = this::class.simpleName
+    private val tag = this::class.simpleName!!
     private val scope = CoroutineScope(Dispatchers.IO)
 
     override val articlesSyncingStream = MutableStateFlow(false)
@@ -43,7 +44,7 @@ internal class ArticlesController @Inject constructor(
             loadArticlesFromBackend()
         }
     } catch (exception: Exception) {
-        Log.w(tag, "Failed to load articles from backend", exception)
+        Timber.tag(tag).w(exception, "Failed to load articles from backend")
         emptyList()
     } finally {
         articlesSyncingStream.value = false
@@ -58,16 +59,16 @@ internal class ArticlesController @Inject constructor(
             val newOrChangedArticles = remoteArticles - getLocalArticles.getAll()
             if (newOrChangedArticles.isNotEmpty()) {
                 saveLocalArticles.insertOrReplace(newOrChangedArticles)
-                Log.d(
-                    tag,
-                    "Synced ${remoteArticles.size} articles " +
-                            "(${newOrChangedArticles.size} new or changed)"
+                Timber.tag(tag).d(
+                    "Synced %d articles " + "(%d new or changed)",
+                    remoteArticles.size,
+                    newOrChangedArticles.size
                 )
             } else {
-                Log.d(tag, "Synced nothing (no changes detected)")
+                Timber.tag(tag).d("Synced nothing (no changes detected)")
             }
         } catch (exception: Exception) {
-            Log.e(tag, "Failed to sync articles to local database", exception)
+            Timber.tag(tag).e(exception, "Failed to sync articles to local database")
         }
     }
 }

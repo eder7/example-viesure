@@ -47,6 +47,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:${project.properties["retrofitVersion"]}")
     implementation("com.squareup.retrofit2:converter-gson:${project.properties["retrofitVersion"]}")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("com.jakewharton.timber:timber:${project.properties["timberVersion"]}")
 
     testImplementation("junit:junit:4.13.2")
 }
