@@ -39,9 +39,13 @@ dependencies {
     implementation("com.google.android.material:material:1.9.0")
     implementation("com.google.dagger:dagger:${project.properties["daggerVersion"]}")
     kapt("com.google.dagger:dagger-compiler:${project.properties["daggerVersion"]}")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${project.properties["coroutinesVersion"]}")
     implementation("com.jakewharton.timber:timber:${project.properties["timberVersion"]}")
 
     testImplementation("junit:junit:4.13.2")
+    testImplementation("io.mockk:mockk:${project.properties["mockkVersion"]}")
+    kaptTest("com.google.dagger:dagger-compiler:${project.properties["daggerVersion"]}")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${project.properties["coroutinesVersion"]}")
 
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
