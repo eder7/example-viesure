@@ -1,11 +1,10 @@
 package io.viesure.test.usecases
 
-import android.util.Log
 import io.viesure.test.entities.Article
 import io.viesure.test.usecases.be.LoadArticlesFromBackend
+import io.viesure.test.usecases.platform.Dispatchers
 import io.viesure.test.usecases.utils.retry
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -16,14 +15,15 @@ import javax.inject.Singleton
  * Contains business logic around articles (loading from backend, syncing, persisting locally)
  */
 @Singleton
-internal class ArticlesController @Inject constructor(
+class ArticlesController @Inject constructor(
     private val loadArticlesFromBackend: LoadArticlesFromBackend,
     private val saveLocalArticles: PutArticles,
-    private val getLocalArticles: GetArticles
+    private val getLocalArticles: GetArticles,
+    dispatchers: Dispatchers
 ) : GetArticlesSyncing {
 
     private val tag = this::class.simpleName!!
-    private val scope = CoroutineScope(Dispatchers.IO)
+    private val scope = CoroutineScope(dispatchers.io)
 
     override val articlesSyncingStream = MutableStateFlow(false)
 
@@ -60,7 +60,7 @@ internal class ArticlesController @Inject constructor(
             if (newOrChangedArticles.isNotEmpty()) {
                 saveLocalArticles.insertOrReplace(newOrChangedArticles)
                 Timber.tag(tag).d(
-                    "Synced %d articles " + "(%d new or changed)",
+                    "Synced %d articles (%d new or changed)",
                     remoteArticles.size,
                     newOrChangedArticles.size
                 )
