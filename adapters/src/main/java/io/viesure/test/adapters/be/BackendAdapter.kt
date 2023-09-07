@@ -4,6 +4,8 @@ import io.viesure.test.usecases.be.LoadArticlesFromBackend
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import java.text.SimpleDateFormat
+import java.util.Locale
 import javax.inject.Inject
 import io.viesure.test.entities.Article as ArticleEntity
 
@@ -36,4 +38,17 @@ private data class Article(
 )
 
 private fun Article.toEntity() =
-    ArticleEntity(id, title, description, author, release_date, image)
+    ArticleEntity(
+        id,
+        title,
+        description,
+        author,
+        parseDate(release_date),
+        image
+    )
+
+private val dateFormatter = SimpleDateFormat("M/d/y", Locale.ROOT)
+
+private fun parseDate(releaseDateString: String): Long {
+    return dateFormatter.parse(releaseDateString)!!.time / 1000L
+}

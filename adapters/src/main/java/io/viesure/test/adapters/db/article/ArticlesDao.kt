@@ -25,7 +25,7 @@ internal data class Article(
     @NonNull @ColumnInfo(name = "title") val title: String,
     @NonNull @ColumnInfo(name = "description") val description: String,
     @NonNull @ColumnInfo(name = "author_email") val authorEmail: String,
-    @NonNull @ColumnInfo(name = "release_date_string") val releaseDateString: String, // TODO can be converted to timestamp
+    @NonNull @ColumnInfo(name = "release_date_seconds") val releaseDateSeconds: Long,
     @NonNull @ColumnInfo(name = "image_uri") val imageUri: String
 ) {
     companion object {
@@ -34,18 +34,17 @@ internal data class Article(
             entity.title,
             entity.description,
             entity.authorEmail,
-            entity.releaseDateString,
+            entity.releaseDateSeconds,
             entity.imageUri
         )
     }
 }
 
-internal fun Article.toEntity() =
-    io.viesure.test.entities.Article(
-        id,
-        title,
-        description,
-        authorEmail,
-        releaseDateString,
-        imageUri
-    )
+internal fun Article.toEntity() = io.viesure.test.entities.Article(
+    id,
+    title,
+    description,
+    authorEmail,
+    releaseDateSeconds,
+    imageUri
+)
