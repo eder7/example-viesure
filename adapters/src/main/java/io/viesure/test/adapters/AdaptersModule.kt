@@ -11,6 +11,7 @@ import io.viesure.test.usecases.UseCasesModule
         BackendModule::class,
         UseCasesModule::class,
         DatabaseModule::class,
-        AndroidModule::class]
+        AndroidModule::class
+    ]
 )
 abstract class AdaptersModule

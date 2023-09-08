@@ -4,7 +4,6 @@ import dagger.Component
 import io.viesure.test.usecases.ArticlesControllerTest
 import javax.inject.Singleton
 
-
 @Component(modules = [FakeModule::class])
 @Singleton
 interface TestComponent {

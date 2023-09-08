@@ -9,8 +9,6 @@ import io.viesure.test.usecases.PutArticles
 import io.viesure.test.usecases.UseCasesModule
 import io.viesure.test.usecases.be.LoadArticlesFromBackend
 import io.viesure.test.usecases.platform.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.TestScope

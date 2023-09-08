@@ -1,9 +1,9 @@
 package io.viesure.test.adapters.db.article
 
 import io.viesure.adapters.db.Database
+import io.viesure.test.usecases.CurrentSortedArticlesStream
 import io.viesure.test.usecases.GetArticle
 import io.viesure.test.usecases.GetArticles
-import io.viesure.test.usecases.CurrentSortedArticlesStream
 import io.viesure.test.usecases.PutArticles
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

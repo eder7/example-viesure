@@ -21,7 +21,8 @@ abstract class DatabaseModule {
             databaseEncryptionKey: DatabaseEncryptionKey
         ) = Room.databaseBuilder(
             applicationContext,
-            Database::class.java, "main-encrypted"
+            Database::class.java,
+            "main-encrypted"
         )
             .openHelperFactory(
                 SupportFactory(

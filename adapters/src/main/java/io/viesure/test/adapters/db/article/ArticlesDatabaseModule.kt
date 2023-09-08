@@ -2,9 +2,9 @@ package io.viesure.test.adapters.db.article
 
 import dagger.Binds
 import dagger.Module
+import io.viesure.test.usecases.CurrentSortedArticlesStream
 import io.viesure.test.usecases.GetArticle
 import io.viesure.test.usecases.GetArticles
-import io.viesure.test.usecases.CurrentSortedArticlesStream
 import io.viesure.test.usecases.PutArticles
 
 @Module

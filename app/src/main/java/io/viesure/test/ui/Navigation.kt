@@ -16,7 +16,6 @@ private const val ARTICLE_DETAIL_ID_KEY = "articleId"
 
 @Composable
 fun AppNavigation() {
-
     val navController = rememberNavController()
     val actions = AppActions(navController)
 

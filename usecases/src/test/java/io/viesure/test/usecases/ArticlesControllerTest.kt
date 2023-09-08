@@ -6,13 +6,15 @@ import io.viesure.test.entities.Article
 import io.viesure.test.usecases.be.LoadArticlesFromBackend
 import io.viesure.test.usecases.di.DaggerTestComponent
 import io.viesure.test.usecases.di.FakeModule
+import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Test
 import java.time.Instant
 import javax.inject.Inject

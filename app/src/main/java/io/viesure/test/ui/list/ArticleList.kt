@@ -4,8 +4,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -44,21 +44,22 @@ fun ArticlesList(articleSelected: (Int) -> Unit) {
         Box(modifier = Modifier.padding(innerPadding)) {
             val uiState = viewModel.uiState.collectAsState(ArticleListViewModel.UiState.INITIAL)
 
+            LazyColumn {
+                items(uiState.value.articles) { article ->
+                    Box(
+                        modifier = Modifier
+                            .clickable { articleSelected(article.id) }
+                    ) {
+                        ArticleListItem(article)
+                    }
+                }
+            }
+
             if (uiState.value.loading) {
                 LinearProgressIndicator(
                     modifier = Modifier
                         .fillMaxWidth()
                 )
-            }
-
-            LazyColumn {
-                items(uiState.value.articles) { article ->
-                    Box(modifier = Modifier
-                        .clickable { articleSelected(article.id) }
-                    ) {
-                        ArticleListItem(article)
-                    }
-                }
             }
         }
     }

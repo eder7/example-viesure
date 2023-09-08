@@ -59,7 +59,8 @@ fun ArticleDetails(articleId: Int, navigateUp: () -> Unit) {
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
-                }, navigationIcon = {
+                },
+                navigationIcon = {
                     IconButton(onClick = navigateUp) {
                         Icon(
                             imageVector = Icons.Rounded.ArrowBack,

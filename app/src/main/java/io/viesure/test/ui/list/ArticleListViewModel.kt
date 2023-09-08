@@ -6,8 +6,6 @@ import androidx.lifecycle.viewModelScope
 import io.viesure.test.usecases.CurrentSortedArticlesStream
 import io.viesure.test.usecases.GetArticlesSyncing
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.flowOn
@@ -24,12 +22,6 @@ class ArticleListViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(UiState.INITIAL)
     val uiState = _uiState.asSharedFlow()
-
-    private val _uiActions = MutableSharedFlow<UiAction>(
-        extraBufferCapacity = 99,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
-    val uiActions = _uiActions.asSharedFlow()
 
     init {
         launchArticlesStream()
@@ -68,10 +60,6 @@ class ArticleListViewModel @Inject constructor(
         }
     }
 
-    sealed interface UiAction {
-        data class ShowError(val message: String) : UiAction
-    }
-
     data class UiState(val loading: Boolean, val articles: List<Article>) {
         companion object {
             val INITIAL = UiState(
@@ -91,12 +79,12 @@ class ArticleListViewModel @Inject constructor(
             fun createDummy() = Article(
                 Random.nextInt(),
                 "Some title is here to inform us about something about something about something" +
-                        " about something about something about something about something",
+                    " about something about something about something about something",
                 "Some description, Some description, Some description, Some description, Some " +
-                        "description, Some description, Some description, Some description, Some " +
-                        "description, Some description, Some description, Some description, Some " +
-                        "description, Some description, Some description, Some description, Some " +
-                        "description, Some description!",
+                    "description, Some description, Some description, Some description, Some " +
+                    "description, Some description, Some description, Some description, Some " +
+                    "description, Some description, Some description, Some description, Some " +
+                    "description, Some description!",
                 Uri.parse("")
             )
 
