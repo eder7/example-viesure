@@ -5,7 +5,7 @@ import dagger.Module
 import io.viesure.test.usecases.be.LoadArticlesFromBackend
 
 @Module
-abstract class BackendModule {
+internal abstract class BackendModule {
 
     @Binds
     abstract fun bindLoadArticlesFromBackend(backendAdapter: BackendAdapter): LoadArticlesFromBackend

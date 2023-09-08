@@ -1,4 +1,4 @@
-package io.viesure.test.di
+package io.viesure.test.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -9,11 +9,12 @@ import dagger.multibindings.IntoMap
 import io.viesure.test.ui.detail.ArticleDetailsViewModel
 import io.viesure.test.ui.list.ArticleListViewModel
 import io.viesure.test.utils.ViewModelFactory
+import io.viesure.test.utils.ViewModelFactoryModule
 import java.lang.annotation.Documented
 import kotlin.reflect.KClass
 
-@Module
-abstract class ViewModelModule {
+@Module(includes = [ViewModelFactoryModule::class])
+internal abstract class ViewModelsModule {
     @Binds
     @IntoMap
     @ViewModelKey(ArticleListViewModel::class)
@@ -28,9 +29,5 @@ abstract class ViewModelModule {
     internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
 }
 
-@Suppress("DEPRECATED_JAVA_ANNOTATION")
-@Documented
-@Target(AnnotationTarget.FUNCTION)
-@Retention(AnnotationRetention.RUNTIME)
 @MapKey
 internal annotation class ViewModelKey(val value: KClass<out ViewModel>)

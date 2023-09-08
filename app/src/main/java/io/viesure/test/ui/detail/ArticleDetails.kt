@@ -35,7 +35,7 @@ import io.viesure.test.utils.ViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ArticleDetails(articleId: Int, navigateUp: () -> Unit) {
+internal fun ArticleDetails(articleId: Int, navigateUp: () -> Unit) {
 
     val viewModel = viewModel(
         ArticleDetailsViewModel::class.java,

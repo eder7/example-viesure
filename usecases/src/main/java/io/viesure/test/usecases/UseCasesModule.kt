@@ -6,5 +6,5 @@ import dagger.Module
 @Module
 abstract class UseCasesModule {
     @Binds
-    internal abstract fun bindGetArticlesSyncing(articlesController: ArticlesController): GetArticlesSyncing
+    abstract fun bindGetArticlesSyncing(articlesController: ArticlesController): GetArticlesSyncing
 }

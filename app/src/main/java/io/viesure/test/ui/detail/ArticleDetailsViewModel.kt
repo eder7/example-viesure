@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import javax.inject.Inject
 
-class ArticleDetailsViewModel @Inject constructor(val getArticle: GetArticle) : ViewModel() {
+internal class ArticleDetailsViewModel @Inject constructor(val getArticle: GetArticle) : ViewModel() {
 
     private val _uiState = MutableStateFlow(UiState.INITIAL)
     val uiState = _uiState.asSharedFlow()

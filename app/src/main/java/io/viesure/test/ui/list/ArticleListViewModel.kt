@@ -15,7 +15,7 @@ import javax.inject.Inject
 import kotlin.random.Random
 import io.viesure.test.entities.Article as ArticleEntity
 
-class ArticleListViewModel @Inject constructor(
+internal class ArticleListViewModel @Inject constructor(
     private val currentSortedArticlesStream: CurrentSortedArticlesStream,
     private val getArticlesSyncing: GetArticlesSyncing
 ) : ViewModel() {
