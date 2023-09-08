@@ -10,7 +10,6 @@ import io.viesure.test.ui.detail.ArticleDetailsViewModel
 import io.viesure.test.ui.list.ArticleListViewModel
 import io.viesure.test.utils.ViewModelFactory
 import io.viesure.test.utils.ViewModelFactoryModule
-import java.lang.annotation.Documented
 import kotlin.reflect.KClass
 
 @Module(includes = [ViewModelFactoryModule::class])

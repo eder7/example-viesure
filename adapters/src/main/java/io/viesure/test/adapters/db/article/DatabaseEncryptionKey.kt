@@ -11,6 +11,7 @@ private const val PREFS_KEY = "db_encryption_key"
 private const val KEY_SIZE = 256
 private const val KEY_ALGORITHM = "AES"
 private val HEX_CHARS = "0123456789ABCDEF".toCharArray()
+private const val LOG_NEW_ENCRYPTION_KEY = "New encryption key created!"
 
 @Singleton
 class DatabaseEncryptionKey @Inject constructor(
@@ -23,7 +24,7 @@ class DatabaseEncryptionKey @Inject constructor(
     private fun createAndPersist(): CharArray =
         generateRandomKey()
             .also {
-                Timber.tag(tag).d("New encryption key created!")
+                Timber.tag(tag).d(LOG_NEW_ENCRYPTION_KEY)
                 persist(it)
             }
 

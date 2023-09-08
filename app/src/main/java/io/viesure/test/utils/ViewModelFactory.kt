@@ -4,11 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import dagger.Binds
 import dagger.Module
-import dagger.multibindings.IntoMap
 import io.viesure.test.di.AppComponent
-import io.viesure.test.ui.ViewModelKey
-import io.viesure.test.ui.detail.ArticleDetailsViewModel
-import io.viesure.test.ui.list.ArticleListViewModel
 import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Singleton
@@ -48,4 +44,3 @@ abstract class ViewModelFactoryModule {
     @Binds
     internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
 }
-

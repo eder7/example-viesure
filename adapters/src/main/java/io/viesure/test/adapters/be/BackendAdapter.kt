@@ -9,10 +9,13 @@ import java.util.Locale
 import javax.inject.Inject
 import io.viesure.test.entities.Article as ArticleEntity
 
+private const val BASE_URL = "https://run.mocky.io/v3/"
+private const val DATE_FORMAT = "M/d/y"
+
 class BackendAdapter @Inject constructor() : LoadArticlesFromBackend {
 
     private val retrofit = Retrofit.Builder()
-        .baseUrl("https://run.mocky.io/v3/")
+        .baseUrl(BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
@@ -47,7 +50,7 @@ private fun Article.toEntity() =
         image
     )
 
-private val dateFormatter = SimpleDateFormat("M/d/y", Locale.ROOT)
+private val dateFormatter = SimpleDateFormat(DATE_FORMAT, Locale.ROOT) // TODO
 
 private fun parseDate(releaseDateString: String): Long {
     return dateFormatter.parse(releaseDateString)!!.time / 1000L

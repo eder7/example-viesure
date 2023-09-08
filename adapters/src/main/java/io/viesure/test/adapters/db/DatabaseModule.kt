@@ -10,6 +10,8 @@ import net.sqlcipher.database.SQLiteDatabase
 import net.sqlcipher.database.SupportFactory
 import javax.inject.Singleton
 
+private const val DATABASE_NAME = "main-encrypted"
+
 @Module(includes = [ArticlesDatabaseModule::class])
 abstract class DatabaseModule {
     companion object {
@@ -22,7 +24,7 @@ abstract class DatabaseModule {
         ) = Room.databaseBuilder(
             applicationContext,
             Database::class.java,
-            "main-encrypted"
+            DATABASE_NAME
         )
             .openHelperFactory(
                 SupportFactory(

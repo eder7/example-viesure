@@ -16,7 +16,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.viesure.test.R
 import io.viesure.test.utils.ViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,7 +38,7 @@ internal fun ArticlesList(articleSelected: (Int) -> Unit) {
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
                 title = {
-                    Text("Hello Viesure 🙂")
+                    Text(stringResource(R.string.welcome_title))
                 }
             )
         }

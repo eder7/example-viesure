@@ -25,12 +25,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import io.viesure.test.R
 import io.viesure.test.utils.ViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -103,13 +105,13 @@ internal fun ArticleDetails(articleId: Int, navigateUp: () -> Unit) {
                 Spacer(modifier = Modifier.size(16.dp))
                 Row {
                     Text(
-                        text = "Author: ",
-                        style = MaterialTheme.typography.bodySmall
+                        text = stringResource(R.string.article_details_author),
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Bold
                     )
                     Text(
                         text = uiState.value.authorEmail,
-                        style = MaterialTheme.typography.bodySmall,
-                        fontWeight = FontWeight.Bold
+                        style = MaterialTheme.typography.bodySmall
                     )
                 }
             }

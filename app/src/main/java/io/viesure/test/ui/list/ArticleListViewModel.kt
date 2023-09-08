@@ -1,6 +1,5 @@
 package io.viesure.test.ui.list
 
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.viesure.test.usecases.CurrentSortedArticlesStream
@@ -14,6 +13,10 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 import kotlin.random.Random
 import io.viesure.test.entities.Article as ArticleEntity
+
+private val DUMMY_TITLE = "Some title is here to inform us about something! ".repeat(3).trim()
+private val DUMMY_DESCRIPTION = "Some description. ".repeat(15).trim()
+private const val DUMMY_IMAGE_URI = ""
 
 internal class ArticleListViewModel @Inject constructor(
     private val currentSortedArticlesStream: CurrentSortedArticlesStream,
@@ -73,23 +76,25 @@ internal class ArticleListViewModel @Inject constructor(
         val id: Int,
         val title: String,
         val description: String,
-        val imageUri: Uri
+        val imageUri: String
     ) {
         companion object {
-            fun createDummy() = Article(
-                Random.nextInt(),
-                "Some title is here to inform us about something about something about something" +
-                    " about something about something about something about something",
-                "Some description, Some description, Some description, Some description, Some " +
-                    "description, Some description, Some description, Some description, Some " +
-                    "description, Some description, Some description, Some description, Some " +
-                    "description, Some description, Some description, Some description, Some " +
-                    "description, Some description!",
-                Uri.parse("")
-            )
+            fun createDummy(): Article {
+                return Article(
+                    id = Random.nextInt(),
+                    title = DUMMY_TITLE,
+                    description = DUMMY_DESCRIPTION,
+                    imageUri = DUMMY_IMAGE_URI
+                )
+            }
 
             fun fromEntity(article: ArticleEntity) =
-                Article(article.id, article.title, article.description, Uri.parse(article.imageUri))
+                Article(
+                    id = article.id,
+                    title = article.title,
+                    description = article.description,
+                    imageUri = article.imageUri
+                )
         }
     }
 }

@@ -11,6 +11,11 @@ import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
+private const val LOG_LOAD_FAILED = "Failed to load articles from backend"
+private const val LOG_SYNCED = "Synced %d articles from backend (%d new or changed)"
+private const val LOG_SYNCED_NOTHING = "Synced nothing from backend (no changes detected)"
+private const val LOG_SYNC_FAILED = "Failed to sync articles from backend"
+
 /**
  * Contains business logic around articles (loading from backend, syncing, persisting locally)
  */
@@ -44,7 +49,7 @@ class ArticlesController @Inject constructor(
             loadArticlesFromBackend()
         }
     } catch (exception: Exception) {
-        Timber.tag(tag).w(exception, "Failed to load articles from backend")
+        Timber.tag(tag).w(exception, LOG_LOAD_FAILED)
         emptyList()
     } finally {
         articlesSyncingStream.value = false
@@ -60,15 +65,15 @@ class ArticlesController @Inject constructor(
             if (newOrChangedArticles.isNotEmpty()) {
                 saveLocalArticles.insertOrReplace(newOrChangedArticles)
                 Timber.tag(tag).d(
-                    "Synced %d articles (%d new or changed)",
+                    LOG_SYNCED,
                     remoteArticles.size,
                     newOrChangedArticles.size
                 )
             } else {
-                Timber.tag(tag).d("Synced nothing (no changes detected)")
+                Timber.tag(tag).d(LOG_SYNCED_NOTHING)
             }
         } catch (exception: Exception) {
-            Timber.tag(tag).e(exception, "Failed to sync articles to local database")
+            Timber.tag(tag).e(exception, LOG_SYNC_FAILED)
         }
     }
 }

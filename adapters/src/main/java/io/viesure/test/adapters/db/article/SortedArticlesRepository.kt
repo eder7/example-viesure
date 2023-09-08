@@ -19,6 +19,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import io.viesure.test.entities.Article as ArticleEntity
 
+private const val LOG_LOADED_ARTICLES = "Loaded %d persisted articles"
+
 /**
  * This repository abstracts access to locally persisted articles and is optimized for small
  * datasets only, reducing database read operations but needing to hold the whole dataset
@@ -36,7 +38,7 @@ internal class SortedArticlesRepository @Inject constructor(private val database
             articles.map { article ->
                 article.toEntity()
             }.also {
-                Timber.tag(tag).i("Loaded %d persisted articles", it.size)
+                Timber.tag(tag).i(LOG_LOADED_ARTICLES, it.size)
             }
         }.shareIn(scope, SharingStarted.Eagerly, replay = 1)
 
