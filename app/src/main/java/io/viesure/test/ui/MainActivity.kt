@@ -3,6 +3,7 @@ package io.viesure.test.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import io.viesure.test.ui.navigation.NavigationComponent
 import io.viesure.test.ui.theme.ViesureTheme
 
 class MainActivity : ComponentActivity() {
@@ -11,7 +12,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             ViesureTheme {
-                AppNavigation()
+                NavigationComponent()
             }
         }
     }

@@ -1,16 +1,23 @@
 package io.viesure.test.ui.list
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import io.viesure.test.ui.navigation.Routes
 import io.viesure.test.usecases.CurrentSortedArticlesStream
 import io.viesure.test.usecases.GetArticlesSyncing
+import io.viesure.test.utils.ui.navigation.NavigatingViewModel
+import io.viesure.test.utils.ui.navigation.Navigator
+import io.viesure.test.utils.ui.viewmodelfactory.ViewModelAssistedFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import javax.inject.Inject
 import kotlin.random.Random
 import io.viesure.test.entities.Article as ArticleEntity
 
@@ -18,10 +25,12 @@ private val DUMMY_TITLE = "Some title is here to inform us about something! ".re
 private val DUMMY_DESCRIPTION = "Some description. ".repeat(15).trim()
 private const val DUMMY_IMAGE_URI = ""
 
-internal class ArticleListViewModel @Inject constructor(
+internal class ArticleListViewModel @AssistedInject constructor(
     private val currentSortedArticlesStream: CurrentSortedArticlesStream,
-    private val getArticlesSyncing: GetArticlesSyncing
-) : ViewModel() {
+    private val getArticlesSyncing: GetArticlesSyncing,
+    override val navigator: Navigator,
+    @Assisted private val savedStateHandle: SavedStateHandle
+) : ViewModel(), NavigatingViewModel {
 
     private val _uiState = MutableStateFlow(UiState.INITIAL)
     val uiState = _uiState.asSharedFlow()
@@ -29,6 +38,10 @@ internal class ArticleListViewModel @Inject constructor(
     init {
         launchArticlesStream()
         launchArticlesLoadingStream()
+    }
+
+    fun onArticleClicked(articleId: Int) {
+        navigator.navigateToRoute(Routes.ArticleDetails(articleId))
     }
 
     private fun launchArticlesStream() {
@@ -97,4 +110,7 @@ internal class ArticleListViewModel @Inject constructor(
                 )
         }
     }
+
+    @AssistedFactory
+    interface Factory : ViewModelAssistedFactory<ArticleListViewModel>
 }

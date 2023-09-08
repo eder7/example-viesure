@@ -30,21 +30,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import io.viesure.test.R
-import io.viesure.test.utils.ViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun ArticleDetails(articleId: Int, navigateUp: () -> Unit) {
-
-    val viewModel = viewModel(
-        ArticleDetailsViewModel::class.java,
-        factory = ViewModelFactory.INSTANCE
-    )
-
-    viewModel.setArticleId(articleId)
+internal fun ArticleDetails(viewModel: ArticleDetailsViewModel) {
 
     val uiState = viewModel.uiState.collectAsState(ArticleDetailsViewModel.UiState.INITIAL)
 
@@ -63,7 +54,7 @@ internal fun ArticleDetails(articleId: Int, navigateUp: () -> Unit) {
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = navigateUp) {
+                    IconButton(onClick = viewModel::onBackClicked) {
                         Icon(
                             imageVector = Icons.Rounded.ArrowBack,
                             contentDescription = null

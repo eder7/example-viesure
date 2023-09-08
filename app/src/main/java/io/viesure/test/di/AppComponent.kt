@@ -4,8 +4,7 @@ import android.app.Application
 import dagger.BindsInstance
 import dagger.Component
 import io.viesure.test.TestApplication
-import io.viesure.test.ui.MainActivity
-import io.viesure.test.utils.ViewModelFactory
+import io.viesure.test.utils.ui.viewmodelfactory.ViewModelFactory
 import javax.inject.Singleton
 
 @Singleton
@@ -20,10 +19,7 @@ interface AppComponent {
         fun build(): AppComponent
     }
 
-    val viewModelFactory: ViewModelFactory
-
-    fun inject(testApplication: TestApplication)
-    fun inject(mainActivity: MainActivity)
+    fun getViewModelFactory(): ViewModelFactory
 
     companion object {
         lateinit var INSTANCE: AppComponent

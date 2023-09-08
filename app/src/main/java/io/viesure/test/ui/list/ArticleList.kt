@@ -17,18 +17,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
 import io.viesure.test.R
-import io.viesure.test.utils.ViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun ArticlesList(articleSelected: (Int) -> Unit) {
-
-    val viewModel = viewModel(
-        ArticleListViewModel::class.java,
-        factory = ViewModelFactory.INSTANCE
-    )
+internal fun ArticlesList(viewModel: ArticleListViewModel) {
 
     Scaffold(
         topBar = {
@@ -50,7 +43,7 @@ internal fun ArticlesList(articleSelected: (Int) -> Unit) {
                 items(uiState.value.articles) { article ->
                     Box(
                         modifier = Modifier
-                            .clickable { articleSelected(article.id) }
+                            .clickable { viewModel.onArticleClicked(article.id) }
                     ) {
                         ArticleListItem(article)
                     }

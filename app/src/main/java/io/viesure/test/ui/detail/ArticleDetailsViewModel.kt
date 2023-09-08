@@ -1,11 +1,19 @@
 package io.viesure.test.ui.detail
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import io.viesure.test.R
 import io.viesure.test.entities.Article
+import io.viesure.test.ui.navigation.Routes
 import io.viesure.test.usecases.GetArticle
 import io.viesure.test.usecases.platform.Strings
+import io.viesure.test.utils.ui.navigation.NavigatingViewModel
+import io.viesure.test.utils.ui.navigation.Navigator
+import io.viesure.test.utils.ui.viewmodelfactory.ViewModelAssistedFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,12 +21,15 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
-import javax.inject.Inject
 
-internal class ArticleDetailsViewModel @Inject constructor(
+internal class ArticleDetailsViewModel @AssistedInject constructor(
     private val getArticle: GetArticle,
-    strings: Strings
-) : ViewModel() {
+    strings: Strings,
+    @Assisted private val savedStateHandle: SavedStateHandle,
+    override val navigator: Navigator
+) : ViewModel(), NavigatingViewModel {
+
+    private val articleId = Routes.ArticleDetails.getIndexFrom(savedStateHandle)
 
     private val _uiState = MutableStateFlow(UiState.INITIAL)
     val uiState = _uiState.asSharedFlow()
@@ -33,12 +44,16 @@ internal class ArticleDetailsViewModel @Inject constructor(
         Locale.getDefault()
     )
 
-    fun setArticleId(articleId: Int) {
+    init {
         oneShotScope.launch {
             _uiState.value = getArticle.get(articleId)
                 ?.toUiState()
                 ?: let { UiState.INITIAL }
         }
+    }
+
+    fun onBackClicked() {
+        navigator.navigateUp()
     }
 
     private fun Article.toUiState() = UiState(
@@ -65,4 +80,7 @@ internal class ArticleDetailsViewModel @Inject constructor(
             val INITIAL = UiState()
         }
     }
+
+    @AssistedFactory
+    interface Factory : ViewModelAssistedFactory<ArticleDetailsViewModel>
 }
