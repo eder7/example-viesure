@@ -58,7 +58,12 @@ class FakeModule(setup: Setup) {
 
     @Provides
     @Singleton
-    fun provideDispatchers(testDispatcher: TestDispatcher) = Dispatchers.create(testDispatcher)
+    fun provideDispatchers(testDispatcher: TestDispatcher) = object : Dispatchers {
+        override val default = testDispatcher
+        override val main = testDispatcher
+        override val unconfined = testDispatcher
+        override val io = testDispatcher
+    }
 
     data class Setup(
         val localArticles: List<Article> = emptyList(),
