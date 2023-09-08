@@ -2,6 +2,7 @@ package io.viesure.test.utils
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.viesure.test.di.AppComponent
 import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Singleton
@@ -29,5 +30,9 @@ class ViewModelFactory @Inject constructor(
         }
 
         return creator.get() as T
+    }
+
+    companion object {
+        val INSTANCE by lazy { AppComponent.INSTANCE.viewModelFactory }
     }
 }

@@ -1,9 +1,9 @@
-package io.viesure.test.ui
+package io.viesure.test.ui.list
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.viesure.test.usecases.GetCurrentArticles
+import io.viesure.test.usecases.CurrentSortedArticlesStream
 import io.viesure.test.usecases.GetArticlesSyncing
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
@@ -18,7 +18,7 @@ import kotlin.random.Random
 import io.viesure.test.entities.Article as ArticleEntity
 
 class ArticleListViewModel @Inject constructor(
-    private val getCurrentArticles: GetCurrentArticles,
+    private val currentSortedArticlesStream: CurrentSortedArticlesStream,
     private val getArticlesSyncing: GetArticlesSyncing
 ) : ViewModel() {
 
@@ -37,7 +37,7 @@ class ArticleListViewModel @Inject constructor(
     }
 
     private fun launchArticlesStream() {
-        getCurrentArticles.articlesStream
+        currentSortedArticlesStream.articlesStream
             .onEach { articles ->
                 updateUiState { uiState ->
                     uiState.copy(
@@ -74,7 +74,10 @@ class ArticleListViewModel @Inject constructor(
 
     data class UiState(val loading: Boolean, val articles: List<Article>) {
         companion object {
-            val INITIAL = UiState(false, emptyList())
+            val INITIAL = UiState(
+                loading = true,
+                articles = emptyList()
+            )
         }
     }
 
@@ -87,8 +90,13 @@ class ArticleListViewModel @Inject constructor(
         companion object {
             fun createDummy() = Article(
                 Random.nextInt(),
-                "Some title is here to inform us about something about something about something about something about something about something about something",
-                "Some description, Some description, Some description, Some description, Some description, Some description, Some description, Some description, Some description, Some description, Some description, Some description, Some description, Some description, Some description, Some description, Some description, Some description!",
+                "Some title is here to inform us about something about something about something" +
+                        " about something about something about something about something",
+                "Some description, Some description, Some description, Some description, Some " +
+                        "description, Some description, Some description, Some description, Some " +
+                        "description, Some description, Some description, Some description, Some " +
+                        "description, Some description, Some description, Some description, Some " +
+                        "description, Some description!",
                 Uri.parse("")
             )
 

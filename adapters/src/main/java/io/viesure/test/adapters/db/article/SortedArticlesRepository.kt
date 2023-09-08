@@ -1,9 +1,9 @@
 package io.viesure.test.adapters.db.article
 
-import android.util.Log
 import io.viesure.adapters.db.Database
+import io.viesure.test.usecases.GetArticle
 import io.viesure.test.usecases.GetArticles
-import io.viesure.test.usecases.GetCurrentArticles
+import io.viesure.test.usecases.CurrentSortedArticlesStream
 import io.viesure.test.usecases.PutArticles
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,13 +17,16 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
+import io.viesure.test.entities.Article as ArticleEntity
 
 /**
- *
+ * This repository abstracts access to locally persisted articles and is optimized for small
+ * datasets only, reducing database read operations but needing to hold the whole dataset
+ * in memory in turn. To support larger datasets paging would have to be implemented.
  */
 @Singleton
-internal class ArticlesRepository @Inject constructor(private val database: Database) :
-    GetCurrentArticles, GetArticles, PutArticles {
+internal class SortedArticlesRepository @Inject constructor(private val database: Database) :
+    CurrentSortedArticlesStream, GetArticles, GetArticle, PutArticles {
 
     private val tag = this::class.simpleName!!
     private val scope = CoroutineScope(Dispatchers.IO)
@@ -37,15 +40,20 @@ internal class ArticlesRepository @Inject constructor(private val database: Data
             }
         }.shareIn(scope, SharingStarted.Eagerly, replay = 1)
 
-    override val articlesStream: StateFlow<List<io.viesure.test.entities.Article>> =
+    override val articlesStream: StateFlow<List<ArticleEntity>> =
         _articlesStream.stateIn(scope, SharingStarted.Eagerly, emptyList())
 
-    override suspend fun getAll(): List<io.viesure.test.entities.Article> =
+    override suspend fun getAll(): List<ArticleEntity> =
         withContext(Dispatchers.IO) {
             _articlesStream.first()
         }
 
-    override suspend fun insertOrReplace(articles: List<io.viesure.test.entities.Article>) =
+    override suspend fun get(id: Int): ArticleEntity? =
+        withContext(Dispatchers.IO) {
+            _articlesStream.first().find { it.id == id }
+        }
+
+    override suspend fun insertOrReplace(articles: List<ArticleEntity>) =
         withContext(Dispatchers.IO) {
             database.articlesDao().insert(articles.map { Article.fromEntity(it) })
         }

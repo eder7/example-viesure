@@ -6,15 +6,22 @@ import kotlinx.coroutines.flow.StateFlow
 /**
  * Streams current local articles, the initial value being an empty list
  */
-interface GetCurrentArticles {
+interface CurrentSortedArticlesStream {
     val articlesStream: StateFlow<List<Article>>
 }
 
 /**
- * Provides current articles, waiting for its availability
+ * Provides articles, potentially waiting for its availability
  */
 interface GetArticles {
     suspend fun getAll(): List<Article>
+}
+
+/**
+ * Provides an article, potentially waiting for its availability
+ */
+interface GetArticle {
+    suspend fun get(id: Int): Article?
 }
 
 interface PutArticles {
